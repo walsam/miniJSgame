@@ -9,7 +9,8 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, gamePlaying;
+var scores, roundScore, activePlayer, gamePlaying, previousDice;
+
 
 inti();
 
@@ -18,19 +19,21 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
     if (gamePlaying) {
         //1. random number
         var dice = Math.floor(Math.random()*6)+1;
-
+        console.log(dice, previousDice);
         //2. display the result
         var diceDOM = document.querySelector('.dice');
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + dice + '.png';
 
         //3. update the round score if the rolled number was not a 1
-        if (dice !== 1) {
+        if (dice !== 1 && dice!==previousDice) {
             //add score
             roundScore += dice;
             document.querySelector('#current-'+activePlayer).textContent = roundScore;
+            previousDice=dice;
         } else {
             //next player
+            if (previousDice===dice && dice===6) lostAll();
             nextPlayer();
         }
     }
@@ -68,6 +71,13 @@ function nextPlayer() {
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
     document.querySelector('.dice').style.display = 'none';
+    previousDice=0;
+}
+
+function lostAll() {
+    scores[activePlayer]=0;
+    roundScore=0;
+    document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
 }
 
 document.querySelector('.btn-new').addEventListener('click',inti);
@@ -92,3 +102,11 @@ function inti() {
     document.querySelector('.player-0-panel').classList.add('active');
     gamePlaying=true;
 }
+
+/*
+adding some more rules
+1. A player looses his ENTIRE score when he rolls two 6 in a row. After that, it's the next player's turn.
+2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100.
+3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1.
+
+ */
