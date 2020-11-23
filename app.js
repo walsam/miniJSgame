@@ -9,7 +9,7 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, gamePlaying, previousDice;
+var scores, roundScore, activePlayer, gamePlaying, previousDice, maxScore;
 
 
 inti();
@@ -48,7 +48,7 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
         document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
 
         //check if the player won the game
-        if (scores[activePlayer]>=100) {
+        if (scores[activePlayer]>=maxScore) {
             //the player has won
             document.querySelector('#name-'+activePlayer).textContent = 'WINNER !';
             document.querySelector('.dice').style.display = 'none';
@@ -86,6 +86,11 @@ function inti() {
     scores = [0,0];
     roundScore = 0;
     activePlayer = 0;
+    maxScore = document.getElementById('maxScore').value;
+    if(maxScore<=0) {
+        maxScore=100;
+    }
+    document.getElementById('maxScoreIs').textContent= 'Max score is : '+maxScore;
 
     document.querySelector('.dice').style.display = 'none';
 
@@ -105,8 +110,5 @@ function inti() {
 
 /*
 adding some more rules
-1. A player looses his ENTIRE score when he rolls two 6 in a row. After that, it's the next player's turn.
-2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100.
 3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1.
-
  */
