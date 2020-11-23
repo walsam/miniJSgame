@@ -9,7 +9,7 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, gamePlaying, previousDice, maxScore;
+var scores, roundScore, activePlayer, gamePlaying, previousDice1, previousDice2, maxScore;
 
 
 inti();
@@ -18,24 +18,35 @@ inti();
 document.querySelector('.btn-roll').addEventListener('click', function(){
     if (gamePlaying) {
         //1. random number
-        var dice = Math.floor(Math.random()*6)+1;
-        console.log(dice, previousDice);
+        var dice1 = Math.floor(Math.random()*6)+1;
+        var dice2 = Math.floor(Math.random()*6)+1;
         //2. display the result
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        var dice1DOM = document.querySelector('.dice1');
+        var dice2DOM = document.querySelector('.dice2');
 
-        //3. update the round score if the rolled number was not a 1
-        if (dice !== 1 && dice!==previousDice) {
-            //add score
-            roundScore += dice;
-            document.querySelector('#current-'+activePlayer).textContent = roundScore;
-            previousDice=dice;
-        } else {
-            //next player
-            if (previousDice===dice && dice===6) lostAll();
+        dice1DOM.style.display = 'block';
+        dice2DOM.style.display = 'block';
+        dice1DOM.src = 'dice-' + dice1 + '.png';
+        dice2DOM.src = 'dice-' + dice2 + '.png';
+
+        //if one of the dices equals 6 and one of the previous dices was already 6
+        if ((previousDice1===6 && (previousDice1 === dice1 || previousDice1 === dice2)) || (previousDice2===6 && (previousDice2 === dice1 || previousDice2 === dice2))){
+            lostAll();
             nextPlayer();
+        } else {
+            //3. update the round score if the rolled number was not a 1
+            if (dice2 !== 1 && dice1 !== 1) {
+                //add score
+                roundScore += dice1+dice2;
+                document.querySelector('#current-'+activePlayer).textContent = roundScore;
+                previousDice1=dice1;
+                previousDice2=dice2;
+            } else {
+                //next player
+                nextPlayer();
+            }
         }
+
     }
 });
 
@@ -51,7 +62,8 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
         if (scores[activePlayer]>=maxScore) {
             //the player has won
             document.querySelector('#name-'+activePlayer).textContent = 'WINNER !';
-            document.querySelector('.dice').style.display = 'none';
+            document.querySelector('.dice1').style.display = 'none';
+            document.querySelector('.dice2').style.display = 'none';
             document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
             document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active');
             gamePlaying=false;
@@ -70,8 +82,10 @@ function nextPlayer() {
 
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
-    document.querySelector('.dice').style.display = 'none';
-    previousDice=0;
+    document.querySelector('.dice1').style.display = 'none';
+    document.querySelector('.dice2').style.display = 'none';
+    previousDice1=0;
+    previousDice2=0;
 }
 
 function lostAll() {
@@ -92,7 +106,8 @@ function inti() {
     }
     document.getElementById('maxScoreIs').textContent= 'Max score is : '+maxScore;
 
-    document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.dice1').style.display = 'none';
+    document.querySelector('.dice2').style.display = 'none';
 
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';
@@ -107,8 +122,3 @@ function inti() {
     document.querySelector('.player-0-panel').classList.add('active');
     gamePlaying=true;
 }
-
-/*
-adding some more rules
-3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1.
- */
