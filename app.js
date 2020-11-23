@@ -100,8 +100,9 @@ function inti() {
     scores = [0,0];
     roundScore = 0;
     activePlayer = 0;
-    maxScore = document.getElementById('maxScore').value;
-    if(maxScore<=0) {
+    if(maxScore>0 && maxScore) {
+        maxScore = document.getElementById('maxScore').value;
+    } else{
         maxScore=100;
     }
     document.getElementById('maxScoreIs').textContent= 'Max score is : '+maxScore;
