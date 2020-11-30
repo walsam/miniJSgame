@@ -2,7 +2,8 @@
 a little js game, to break the boredom 
 (this game is called PIG game)
 
-this is the link to test it: https://loving-morse-e1b52d.netlify.app/
+this is the link to test it: https://walsam-s-pig-game.netlify.app
+
 
 GAME RULES:
 
